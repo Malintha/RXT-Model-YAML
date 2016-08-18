@@ -1,0 +1,56 @@
+inheritsFrom: Type
+nameAttribute: soapService
+storagePath: overridden/storagePath/goes/here
+mediaType: application/vnd.wso2-soap-service+xml
+
+#Since, this description is inherited from the root Type description,
+#no need to retype Name, Version and Description fields.
+
+endPoint:
+    Label: Endpoints
+    required: false
+    type: option-text
+    maxOccurs: unbounded
+    data:
+        - None
+        - Unknown
+        - Dev
+        - Testing
+        - Production
+
+contacts:
+    Label: Contacts
+    maxOccurs: unbounded
+    type: option-text
+    data:
+        - Technical Owner
+        - Business Owner
+
+transportProtocol:
+    Label: Transport Protocol
+    required: false
+    type: option
+    data:
+        - JMS
+        - HTTP
+        - HTTPS
+        - SMTP
+        - TCP
+        - XMPP
+
+docLinks:
+    Label: Doc Links
+    required: false
+    maxOccurs: 3
+    columns:
+        documentType:
+            Label: Document Types
+            type: String
+        url:
+            Label: URL
+            type: String
+        comments:
+            Label: Comments
+            type: String
+
+

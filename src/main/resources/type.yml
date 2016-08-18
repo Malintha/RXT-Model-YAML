@@ -1,0 +1,19 @@
+#This is the root level Asset type description.
+
+nameAttribute: Type
+storagePath: storagePath/goes/here
+
+name:
+    Label: Name
+    required: true
+    type: String
+
+version:
+    Label: Version
+    required: true
+    type: String
+
+description:
+    Label: Description
+    required: false
+    type: string
