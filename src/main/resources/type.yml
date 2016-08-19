@@ -1,6 +1,6 @@
 #This is the root level Asset type description.
 
-nameAttribute: Type
+nameAttribute: type
 storagePath: storagePath/goes/here
 
 name:

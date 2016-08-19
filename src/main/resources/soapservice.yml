@@ -1,5 +1,5 @@
-inheritsFrom: Type
-nameAttribute: soapService
+inheritsFrom: type
+nameAttribute: soapservice
 storagePath: overridden/storagePath/goes/here
 mediaType: application/vnd.wso2-soap-service+xml
 
