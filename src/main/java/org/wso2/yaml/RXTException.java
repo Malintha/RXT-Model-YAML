@@ -16,18 +16,10 @@
 
 package org.wso2.yaml;
 
-import java.io.*;
+public class RXTException extends Exception {
 
-public class InstanceValidator {
-
-    public static void main(String[] args) {
-
-        RXTUtils rxtUtils = new RXTUtils();
-        try {
-            System.out.println(rxtUtils.getRxtConfigMaps().get("soapservice").toString());
-        } catch (RXTException e) {
-            e.printStackTrace();
-        }
-
+    public RXTException(String message, Throwable cause) {
+        super(message, cause);
     }
+
 }
