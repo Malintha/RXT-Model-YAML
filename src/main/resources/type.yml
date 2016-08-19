@@ -1,19 +1,23 @@
 #This is the root level Asset type description.
+#Metadata
+metadata:
+  nameAttribute: type
 
-nameAttribute: type
-storagePath: storagePath/goes/here
+#RXT Content
+content:
+  storagePath: storagePath/goes/here
 
-name:
-    Label: Name
-    required: true
-    type: String
+  name:
+      Label: Name
+      required: true
+      type: String
 
-version:
-    Label: Version
-    required: true
-    type: String
+  version:
+      Label: Version
+      required: true
+      type: String
 
-description:
-    Label: Description
-    required: false
-    type: string
+  description:
+      Label: Description
+      required: false
+      type: string

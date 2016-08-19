@@ -26,14 +26,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class RXTUtils {
 
+    final static String rxtDirPath = "/home/malintha/Desktop/MetaC5/RXT-Model-YAML/src/main/resources";
+    final static String yamlExtension = ".yml";
+
     //return all the yaml files in the resources directory
     public ArrayList<String> retrieveRxtConfigFilePaths() throws IOException {
         ArrayList<String> rxtList = new ArrayList<>();
-        Files.walk(Paths.get("/home/malintha/Desktop/MetaC5/RXT-Model-YAML/src/main/resources")).forEach(filePath -> {
+        Files.walk(Paths.get(rxtDirPath)).forEach(filePath -> {
             if (Files.isRegularFile(filePath)) {
                 rxtList.add(filePath.toString());
             }
@@ -42,27 +46,59 @@ public class RXTUtils {
     }
 
     //return a map of all yaml maps against name.
-    public Map<String, Map<?,?>> getRxtConfigMaps() throws RXTException {
+    public Map<String, Map<Object,Object>> getRxtConfigMaps() throws RXTException {
         ArrayList<String> rxtConfigsFilePaths = null;
         try {
             rxtConfigsFilePaths = retrieveRxtConfigFilePaths();
         } catch (IOException e) {
             throw new RXTException("Problem in retrieving rxt file paths", e);
         }
-        HashMap<String, Map<?,?>> rxtConfigMaps = new HashMap<>();
+        HashMap<String, Map<Object,Object>> rxtConfigMaps = new HashMap<>();
         Yaml yaml = new Yaml();
         for(String path : rxtConfigsFilePaths) {
             File rxtConfigFile = new File(path);
-            Map<?,?> rxtConfig = null;
+            Map<Object,Object> rxtConfig = null;
             try {
                 rxtConfig = yaml.loadAs(new FileInputStream(rxtConfigFile), Map.class);
             } catch (FileNotFoundException e) {
                 throw new RXTException("Problem in building yaml document", e);
             }
             String fname = rxtConfigFile.getName();
-            rxtConfigMaps.put(fname.substring(0,fname.indexOf(".yml")), rxtConfig);
+            rxtConfigMaps.put(fname.substring(0,fname.indexOf(yamlExtension)), rxtConfig);
         }
         return rxtConfigMaps;
+    }
+
+    //read the extends attribute
+    public String getParentRxtName(Map<?,?> rxtConfigMap) {
+        Map<?,?> metaDataMap = getMetadataMap(rxtConfigMap);
+        return metaDataMap.get("extends").toString();
+    }
+
+    public boolean isConcrete(Map<?,?> rxtConfigMap) {
+        Map<?,?> metaDataMap = getMetadataMap(rxtConfigMap);
+        return (Boolean.parseBoolean(metaDataMap.get("concrete").toString()));
+    }
+
+    //create composite property bag
+    public Map<?,?> getCompositeChildRXT(Map<?,?> parentRxt, Map<Object, Object> childRxt) {
+        Map<?,?> parentContent = getContentMap(parentRxt);
+        Iterator it = parentContent.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            childRxt.put(pair.getKey(), pair.getValue());
+            it.remove();
+        }
+
+        return childRxt;
+    }
+
+    public Map<?,?> getMetadataMap(Map<?,?> rxtConfigMap) {
+        return (Map<?, ?>) rxtConfigMap.get("metadata");
+    }
+
+    public Map<?,?> getContentMap(Map<?,?> rxtConfigMap) {
+        return (Map<?, ?>) rxtConfigMap.get("content");
     }
 
 }

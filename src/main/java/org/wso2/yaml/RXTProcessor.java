@@ -16,15 +16,23 @@
 
 package org.wso2.yaml;
 
-import java.io.*;
+import java.util.Map;
 
-public class InstanceValidator {
+public class RXTProcessor {
 
     public static void main(String[] args) {
 
         RXTUtils rxtUtils = new RXTUtils();
         try {
-            System.out.println(rxtUtils.getRxtConfigMaps().get("soapservice").toString());
+            Map<String, Map<Object,Object>> rxtConfigs = rxtUtils.getRxtConfigMaps();
+
+            //hard coding the rxt names
+            Map<Object,Object> soapService = rxtConfigs.get("soapservice");
+
+            String parentRxtName = rxtUtils.getParentRxtName(soapService);
+            Map<?,?> parentRxt = rxtConfigs.get(parentRxtName);
+            Map<?,?> compositeRxt = rxtUtils.getCompositeChildRXT(parentRxt, soapService);
+            System.out.println(compositeRxt.toString());
         } catch (RXTException e) {
             e.printStackTrace();
         }
