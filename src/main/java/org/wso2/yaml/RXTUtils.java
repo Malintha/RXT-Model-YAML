@@ -24,10 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class RXTUtils {
 
@@ -83,15 +80,26 @@ public class RXTUtils {
     //create composite property bag
     public Map<?,?> getCompositeChildRXT(Map<?,?> parentRxt, Map<Object, Object> childRxt) {
         Map<?,?> parentContent = getContentMap(parentRxt);
+        Map<Object, Object> childContent = (Map<Object, Object>) getContentMap(childRxt);
+        Map<Object,Object> childMetadataMap = (Map<Object, Object>) getMetadataMap(childRxt);
         Iterator it = parentContent.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            childRxt.put(pair.getKey(), pair.getValue());
+            childContent.put(pair.getKey(), pair.getValue());
             it.remove();
         }
+//        Map<Object, Object> tempMetaDataMap = childMetadataMap;
+        HashMap<Object, Object> tempMetaDataMap = new HashMap<>();
+        tempMetaDataMap.putAll(childMetadataMap);
+        childMetadataMap.clear();
+        Set<Map.Entry<Object, Object>> childMetaDataEntrySet = tempMetaDataMap.entrySet();
+        childMetadataMap.put("metadata", childMetaDataEntrySet);
 
-        return childRxt;
+//        childMetadataMap.put("metadata", tempMetaDataMap.entrySet());
+        childMetadataMap.put("content",childContent);
+        return childMetadataMap;
     }
+
 
     public Map<?,?> getMetadataMap(Map<?,?> rxtConfigMap) {
         return (Map<?, ?>) rxtConfigMap.get("metadata");
