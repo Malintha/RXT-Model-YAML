@@ -88,14 +88,12 @@ public class RXTUtils {
             childContent.put(pair.getKey(), pair.getValue());
             it.remove();
         }
-//        Map<Object, Object> tempMetaDataMap = childMetadataMap;
         HashMap<Object, Object> tempMetaDataMap = new HashMap<>();
         tempMetaDataMap.putAll(childMetadataMap);
         childMetadataMap.clear();
         Set<Map.Entry<Object, Object>> childMetaDataEntrySet = tempMetaDataMap.entrySet();
         childMetadataMap.put("metadata", childMetaDataEntrySet);
 
-//        childMetadataMap.put("metadata", tempMetaDataMap.entrySet());
         childMetadataMap.put("content",childContent);
         return childMetadataMap;
     }
@@ -109,4 +107,7 @@ public class RXTUtils {
         return (Map<?, ?>) rxtConfigMap.get("content");
     }
 
+    public Object getFieldAttribute(Map<?,?> contentMap, String attribute) {
+        return contentMap.get((Object)attribute);
+    }
 }

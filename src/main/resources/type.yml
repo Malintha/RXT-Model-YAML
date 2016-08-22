@@ -5,7 +5,8 @@ metadata:
 
 #RXT Content
 content:
-  storagePath: storagePath/goes/here
+
+  User:
 
   name:
       Label: Name

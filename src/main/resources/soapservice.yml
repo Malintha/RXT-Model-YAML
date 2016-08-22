@@ -3,19 +3,20 @@ metadata:
   extends: type
   nameAttribute: soapservice
   concrete: true
+  mediaType: application/vnd.wso2-soap-service+xml
 
 #RXT Content
 content:
-  mediaType: application/vnd.wso2-soap-service+xml
-
-  #Since this description is inherited from the root Type description,
-  #no need to retype Name, Version and Description fields.
+#Since this description is inherited from the root Type description,
+#no need to retype Name, Version and Description fields.
 
   endPoint:
       Label: Endpoints
       required: false
       type: option-text
       maxOccurs: unbounded
+      validate: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+      validateMessage: Please enter a valid URL
       data:
           - None
           - Unknown
@@ -43,19 +44,20 @@ content:
           - TCP
           - XMPP
 
-  docLinks:
-      Label: Doc Links
-      required: false
-      maxOccurs: 3
-      columns:
-          documentType:
-              Label: Document Types
-              type: String
-          url:
-              Label: URL
-              type: String
-          comments:
-              Label: Comments
-              type: String
+#  docLinks:
+#      Label: Doc Links
+#      type: table
+#      required: false
+#      maxOccurs: 3
+#      columns:
+#          documentType:
+#              Label: Document Types
+#              type: String
+#          url:
+#              Label: URL
+#              type: String
+#          comments:
+#              Label: Comments
+#              type: String
 
 
