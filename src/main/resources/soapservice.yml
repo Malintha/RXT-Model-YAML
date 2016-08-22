@@ -15,7 +15,7 @@ content:
       required: false
       type: option-text
       maxOccurs: unbounded
-      validate: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+      validate: http
       validateMessage: Please enter a valid URL
       data:
           - None

@@ -16,12 +16,11 @@
 
 package org.wso2.yaml;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class RXTProcessor {
 
@@ -29,7 +28,6 @@ public class RXTProcessor {
 
     public static void main(String[] args) {
 
-//        RXTUtils rxtUtils = new RXTUtils();
         try {
             Map<String, Map<Object,Object>> rxtConfigs = rxtUtils.getRxtConfigMaps();
 
@@ -46,8 +44,6 @@ public class RXTProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("#####Create new SOAP service######\n\n");
 
     }
 
@@ -77,13 +73,12 @@ public class RXTProcessor {
             catch (ClassCastException e) {
                 dataSetMap = (LinkedHashMap)fieldElement;
             }
-//            LinkedHashMap<?,?> dataSet = rxtUtils.getFieldAttribute(contentMap, field);
             if(dataSetMap != null) {
                 String label = (String) dataSetMap.get("Label");
-                boolean isRequired;
-                ArrayList<String> data;
-                String validateRegex;
-                String validateMessage;
+                boolean isRequired = false;
+                ArrayList<String> data = null;
+                String validateRegex = null;
+                String validateMessage = null;
 
                 String type = (String) dataSetMap.get("type");
                 if (dataSetMap.get("required") != null) {
@@ -97,9 +92,37 @@ public class RXTProcessor {
                     validateMessage = (String) dataSetMap.get("validateMessage");
                 }
                 System.out.println("Please enter " + label);
+                if(data != null) {
+                    for(String s : data)
+                        System.out.println(s);
+                }
+                System.out.println();
+                String input = null;
+                if (isRequired) {
+                    while((input = br.readLine()).length() == 0) {
+                        System.out.println("Please enter " + label);
+                    }
+//                    break;
+                }
+                else {
+                    input = br.readLine();
+                }
+
+                if(validateRegex != null) {
+                    if(!input.matches(validateRegex)) {
+                        System.out.println(validateMessage);
+                        while(!(input = br.readLine()).matches(validateRegex)) {
+                            System.out.println(validateMessage);
+                        }
+                    }
+                }
+
+                responseMap.put(field, input);
+
             }
             else if (dataSetStrKey != null){
                 System.out.println("Please enter "+dataSetStrKey);
+                responseMap.put(field, br.readLine());
             }
         }
 
