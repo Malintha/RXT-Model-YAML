@@ -16,6 +16,7 @@
 
 package org.wso2.yaml;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -30,6 +31,8 @@ public class RXTUtils {
 
     final static String rxtDirPath = "/home/malintha/Desktop/MetaC5/RXT-Model-YAML/src/main/resources";
     final static String yamlExtension = ".yml";
+
+    private Map<String, Map<Object,Object>> rxtConfigs;
 
     //return all the yaml files in the resources directory
     public ArrayList<String> retrieveRxtConfigFilePaths() throws IOException {
@@ -63,13 +66,18 @@ public class RXTUtils {
             String fname = rxtConfigFile.getName();
             rxtConfigMaps.put(fname.substring(0,fname.indexOf(yamlExtension)), rxtConfig);
         }
+        this.rxtConfigs = rxtConfigMaps;
         return rxtConfigMaps;
     }
 
+    private Map<Object, Object> getRxt(String rxtName) {
+        return this.rxtConfigs.get(rxtName);
+    }
+
     //read the extends attribute
-    public String getParentRxtName(Map<?,?> rxtConfigMap) {
+    public ArrayList<String> getParentRxtNames(Map<?,?> rxtConfigMap) {
         Map<?,?> metaDataMap = getMetadataMap(rxtConfigMap);
-        return metaDataMap.get("extends").toString();
+        return (ArrayList<String>) metaDataMap.get("extends");
     }
 
     public boolean isConcrete(Map<?,?> rxtConfigMap) {
@@ -85,8 +93,23 @@ public class RXTUtils {
         Iterator it = parentContent.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            childContent.put(pair.getKey(), pair.getValue());
-            it.remove();
+            Map<?,?> attrMap = (Map<?, ?>) pair.getValue();
+            Object inherits;
+            boolean boolInherits;
+            if(attrMap != null) {
+                inherits = attrMap.get("inherits");
+                if(inherits == null) {
+                    boolInherits = true;
+                }
+                else {
+                    boolInherits = (Boolean) inherits;
+                }
+                    if(boolInherits) {
+                        childContent.put(pair.getKey(), pair.getValue());
+                        it.remove();
+                    }
+
+            }
         }
         HashMap<Object, Object> tempMetaDataMap = new HashMap<>();
         tempMetaDataMap.putAll(childMetadataMap);
@@ -94,10 +117,9 @@ public class RXTUtils {
         Set<Map.Entry<Object, Object>> childMetaDataEntrySet = tempMetaDataMap.entrySet();
         childMetadataMap.put("metadata", childMetaDataEntrySet);
 
-        childMetadataMap.put("content",childContent);
+        childMetadataMap.put("content", childContent);
         return childMetadataMap;
     }
-
 
     public Map<?,?> getMetadataMap(Map<?,?> rxtConfigMap) {
         return (Map<?, ?>) rxtConfigMap.get("metadata");
@@ -110,4 +132,12 @@ public class RXTUtils {
     public Object getFieldAttribute(Map<?,?> contentMap, String attribute) {
         return contentMap.get((Object)attribute);
     }
+
+    public Map<Object, Object> preorder(Rxt rxt) {
+
+
+
+        return null;
+    }
+
 }

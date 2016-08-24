@@ -1,12 +1,12 @@
 #This is the root level Asset type description.
 #Metadata
 metadata:
-  nameAttribute: type
+  nameAttribute: service
 
 #RXT Content
 content:
 
-  User:
+  Author:
 
   name:
       Label: Name
@@ -17,8 +17,11 @@ content:
       Label: Version
       required: true
       type: String
+      validate: ([0-9]+\.{0,1})*
+      validateMessage: Please follow the format x.x.x
 
   description:
       Label: Description
       required: false
       type: string
+      inherits: true

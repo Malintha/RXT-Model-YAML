@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class RXTProcessor {
 
@@ -34,10 +33,12 @@ public class RXTProcessor {
             //hard coding the rxt names
             Map<Object,Object> soapService = rxtConfigs.get("soapservice");
 
-            String parentRxtName = rxtUtils.getParentRxtName(soapService);
+            String parentRxtName = rxtUtils.getParentRxtNames(soapService).get(0);
             Map<?,?> parentRxt = rxtConfigs.get(parentRxtName);
             Map<?,?> compositeRxt = rxtUtils.getCompositeChildRXT(parentRxt, soapService);
-//            System.out.println(compositeRxt.toString());
+
+
+
             getCmdInputs(compositeRxt);
         } catch (RXTException e) {
             e.printStackTrace();
@@ -45,7 +46,19 @@ public class RXTProcessor {
             e.printStackTrace();
         }
 
+
+
+
     }
+
+
+    public void preorder(Rxt rxt) {
+        System.out.println(rxt.getMetaData().get("nameAttribute"));
+        for(Rxt r : rxt.getParents()) {
+            preorder(r);
+        }
+    }
+
 
     public static void getCmdInputs(Map<?,?> rxtAttrMap) throws IOException {
 
@@ -96,18 +109,15 @@ public class RXTProcessor {
                     for(String s : data)
                         System.out.println(s);
                 }
-                System.out.println();
                 String input = null;
                 if (isRequired) {
                     while((input = br.readLine()).length() == 0) {
                         System.out.println("Please enter " + label);
                     }
-//                    break;
                 }
                 else {
                     input = br.readLine();
                 }
-
                 if(validateRegex != null) {
                     if(!input.matches(validateRegex)) {
                         System.out.println(validateMessage);
@@ -125,8 +135,5 @@ public class RXTProcessor {
                 responseMap.put(field, br.readLine());
             }
         }
-
-        //input contacts
-
     }
 }
