@@ -19,12 +19,12 @@ package org.wso2.yaml;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Rxt {
+public class RXT {
 
     private Map<?,?> metaData;
     private Map<?,?> content;
 
-    private ArrayList<Rxt> parents;
+    private ArrayList<RXT> parents;
     public boolean isConcrete;
     public Map<?, ?> getMetaData() {
         return metaData;
@@ -42,11 +42,11 @@ public class Rxt {
         this.content = content;
     }
 
-    public void addParent(Rxt parent) {
+    public void addParent(RXT parent) {
         parents.add(parent);
     }
 
-    public ArrayList<Rxt> getParents() {
+    public ArrayList<RXT> getParents() {
         return this.parents;
     }
 

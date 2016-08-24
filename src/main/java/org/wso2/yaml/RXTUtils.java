@@ -16,7 +16,6 @@
 
 package org.wso2.yaml;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -110,6 +109,10 @@ public class RXTUtils {
                     }
 
             }
+            else {
+                childContent.put(pair.getKey(), pair.getValue());
+                it.remove();
+            }
         }
         HashMap<Object, Object> tempMetaDataMap = new HashMap<>();
         tempMetaDataMap.putAll(childMetadataMap);
@@ -133,7 +136,7 @@ public class RXTUtils {
         return contentMap.get((Object)attribute);
     }
 
-    public Map<Object, Object> preorder(Rxt rxt) {
+    public Map<Object, Object> preorder(RXT rxt) {
 
 
 

@@ -16,7 +16,7 @@ content:
       required: false
       type: option-text
       maxOccurs: unbounded
-      validate: http
+      validate: http\.\S+\.com
       validateMessage: Please enter a valid URL
       data:
           - None

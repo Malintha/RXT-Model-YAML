@@ -36,9 +36,6 @@ public class RXTProcessor {
             String parentRxtName = rxtUtils.getParentRxtNames(soapService).get(0);
             Map<?,?> parentRxt = rxtConfigs.get(parentRxtName);
             Map<?,?> compositeRxt = rxtUtils.getCompositeChildRXT(parentRxt, soapService);
-
-
-
             getCmdInputs(compositeRxt);
         } catch (RXTException e) {
             e.printStackTrace();
@@ -47,18 +44,14 @@ public class RXTProcessor {
         }
 
 
-
-
     }
 
-
-    public void preorder(Rxt rxt) {
+    public void preorder(RXT rxt) {
         System.out.println(rxt.getMetaData().get("nameAttribute"));
-        for(Rxt r : rxt.getParents()) {
+        for(RXT r : rxt.getParents()) {
             preorder(r);
         }
     }
-
 
     public static void getCmdInputs(Map<?,?> rxtAttrMap) throws IOException {
 
@@ -134,6 +127,12 @@ public class RXTProcessor {
                 System.out.println("Please enter "+dataSetStrKey);
                 responseMap.put(field, br.readLine());
             }
+        }
+        Iterator rit = responseMap.entrySet().iterator();
+        System.out.println("###### Asset Details ######");
+        while (rit.hasNext()) {
+            Map.Entry pair = (Map.Entry)rit.next();
+            System.out.println(pair.getKey() + " : " +pair.getValue());
         }
     }
 }

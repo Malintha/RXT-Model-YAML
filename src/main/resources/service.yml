@@ -24,4 +24,4 @@ content:
       Label: Description
       required: false
       type: string
-      inherits: true
+      inherits: false
