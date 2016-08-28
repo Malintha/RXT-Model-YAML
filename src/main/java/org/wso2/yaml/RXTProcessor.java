@@ -29,27 +29,24 @@ public class RXTProcessor {
 
         try {
             Map<String, Map<Object,Object>> rxtConfigs = rxtUtils.getRxtConfigMaps();
-
-            //hard coding the rxt names
             Map<Object,Object> soapService = rxtConfigs.get("soapservice");
+            System.out.println(soapService.toString());
+            HashMap<String, Object> soapServiceFields = new HashMap<>();
+            rxtUtils.resolveAllFields(soapService, soapServiceFields);
+            System.out.println(soapServiceFields.toString());
 
-            String parentRxtName = rxtUtils.getParentRxtNames(soapService).get(0);
-            Map<?,?> parentRxt = rxtConfigs.get(parentRxtName);
-            Map<?,?> compositeRxt = rxtUtils.getCompositeChildRXT(parentRxt, soapService);
-            getCmdInputs(compositeRxt);
+
+
+
+
+
+
+//            String parentRxtName = rxtUtils.getParentRxtNames(soapService).get(0);
+//            Map<?,?> parentRxt = rxtConfigs.get(parentRxtName);
+//            Map<?,?> compositeRxt = rxtUtils.getCompositeChildRXT(parentRxt, soapService);
+//            getCmdInputs(compositeRxt);
         } catch (RXTException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    public void preorder(RXT rxt) {
-        System.out.println(rxt.getMetaData().get("nameAttribute"));
-        for(RXT r : rxt.getParents()) {
-            preorder(r);
         }
     }
 

@@ -1,0 +1,19 @@
+docLink:
+  type: field
+
+  content:
+    docType:
+      label: Document Type
+      fieldType: text
+      required: true
+
+    docUrl:
+      label: URL
+      fieldType: text
+      required: true
+
+    comment:
+      label: Comment
+
+
+

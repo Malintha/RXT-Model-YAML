@@ -1,11 +1,12 @@
 #Metadata
-soapservice:
+restservice:
+  displayname: REST Service
   extends:
-    - service
-  displayname: SOAP Service
+        - service
   concrete: true
-  mediaType: application/vnd.wso2-soap-service+xml
+  mediaType: application/vnd.wso2-rest-service+xml
 
+#RXT Content
   content:
     endPoints:
         importField: endpoint
@@ -24,5 +25,7 @@ soapservice:
             - XMPP
 
     docLinks:
-        importField: docLink
-        occurences: [0..n]
+        importField: docLinks
+        occurences: 3
+
+#get all fields recursively to an array. then add them to the required rxt.

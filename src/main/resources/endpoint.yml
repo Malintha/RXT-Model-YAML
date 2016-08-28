@@ -1,0 +1,19 @@
+endpoint:
+  type: field
+
+  content:
+    environment:
+      label: Environment
+      fieldType: set
+      elements:
+           - None
+           - Unknown
+           - Dev
+           - Testing
+           - Production
+
+    url:
+      label: URL
+      fieldType: text
+      regex: http\.\S+\.com
+      validationMessage: Please enter a valid URL

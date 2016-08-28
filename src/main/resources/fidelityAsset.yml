@@ -1,0 +1,12 @@
+fidelityAsset:
+
+  content:
+      createdDate:
+          label: Created Date
+          type: date
+          required: true
+
+      createdTime:
+          label: Created Time
+          type: time
+          required: true

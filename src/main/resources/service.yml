@@ -1,27 +1,24 @@
-#This is the root level Asset type description.
-#Metadata
-metadata:
-  nameAttribute: service
+service:
+  extends:
+        - fidelityAsset
+  content:
 
-#RXT Content
-content:
+    Author: #use a single case for keys #if this concept is used, key will be the label.
 
-  Author:
+    name: #if any field doesnt have a label use the key
+        Label: Name
+        required: true
+        type: String
 
-  name:
-      Label: Name
-      required: true
-      type: String
+    version:
+        Label: Version
+        required: true
+        type: String
+        validate: ([0-9]+\.{0,1})*
+        validateMessage: Please follow the format x.x.x
 
-  version:
-      Label: Version
-      required: true
-      type: String
-      validate: ([0-9]+\.{0,1})*
-      validateMessage: Please follow the format x.x.x
-
-  description:
-      Label: Description
-      required: false
-      type: string
-      inherits: false
+    description:
+        Label: Description
+        required: false
+        type: string
+        inherits: false
