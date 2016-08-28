@@ -8,11 +8,13 @@ docLink:
       required: true
 
     docUrl:
+      appearWith: docType
       label: URL
       fieldType: text
       required: true
 
     comment:
+      appearWith: docUrl
       label: Comment
 
 

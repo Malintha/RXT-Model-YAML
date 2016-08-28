@@ -81,7 +81,7 @@ public class RXTUtils {
         if (rxtConfig == null)
             return fields;
         ArrayList<String> parents = getParentRxtNames(rxtConfig);
-        if(parents != null) {
+        if (parents != null) {
             for (String parent : parents) {
                 Map<?, ?> parentMap = getRxt(parent);
                 if (parentMap != null)
@@ -94,8 +94,7 @@ public class RXTUtils {
                 }
                 resolveAllFields(parentMap, fields);
             }
-        }
-        else {
+        } else {
             HashMap<String, Object> tempFields = getAllInheritingFields(rxtConfig);
             Iterator it = tempFields.entrySet().iterator();
             while (it.hasNext()) {
@@ -124,8 +123,8 @@ public class RXTUtils {
                 if (inherit) {
                     Map<?, ?> composedField = null;
                     if (fieldAttributes.containsKey("importField")) {
-                        //                        composedField = resolveComposedField((String) fieldAttributes.get("importField"));
-                        fields.put(pair.getKey(), "composedField");
+                        composedField = resolveComposedField((String) fieldAttributes.get("importField"));
+                        fields.put(pair.getKey(), composedField);
                     } else {
                         fields.put(pair.getKey(), fieldAttributes);
                     }
@@ -133,6 +132,11 @@ public class RXTUtils {
             }
         }
         return fields;
+    }
+
+    public Map<?, ?> resolveComposedField(String fieldName) {
+        Map<?, ?> remoteField = (Map<?, ?>) rxtConfigs.get(fieldName).get(fieldName);
+        return (Map<?, ?>) remoteField.get("content");
     }
 
     //read the extends attribute
@@ -145,46 +149,6 @@ public class RXTUtils {
         ArrayList<String> parents = getParentRxtNames(rxtConfig);
         return parents != null;
     }
-
-    //create composite property bag
-    //    public Map<?,?> getCompositeChildRXT(Map<?,?> parentRxt, Map<Object, Object> childRxt) {
-    //        Map<?,?> parentContent = getContentMap(parentRxt);
-    //        Map<Object, Object> childContent = (Map<Object, Object>) getContentMap(childRxt);
-    //        Map<Object,Object> childMetadataMap = (Map<Object, Object>) getMetadata(childRxt);
-    //        Iterator it = parentContent.entrySet().iterator();
-    //        while (it.hasNext()) {
-    //            Map.Entry pair = (Map.Entry)it.next();
-    //            Map<?,?> attrMap = (Map<?, ?>) pair.getValue();
-    //            Object inherits;
-    //            boolean boolInherits;
-    //            if(attrMap != null) {
-    //                inherits = attrMap.get("inherits");
-    //                if(inherits == null) {
-    //                    boolInherits = true;
-    //                }
-    //                else {
-    //                    boolInherits = (Boolean) inherits;
-    //                }
-    //                    if(boolInherits) {
-    //                        childContent.put(pair.getKey(), pair.getValue());
-    //                        it.remove();
-    //                    }
-    //
-    //            }
-    //            else {
-    //                childContent.put(pair.getKey(), pair.getValue());
-    //                it.remove();
-    //            }
-    //        }
-    //        HashMap<Object, Object> tempMetaDataMap = new HashMap<>();
-    //        tempMetaDataMap.putAll(childMetadataMap);
-    //        childMetadataMap.clear();
-    //        Set<Map.Entry<Object, Object>> childMetaDataEntrySet = tempMetaDataMap.entrySet();
-    //        childMetadataMap.put("metadata", childMetaDataEntrySet);
-    //
-    //        childMetadataMap.put("content", childContent);
-    //        return childMetadataMap;
-    //    }
 
     public Object getMetadata(Map<?, ?> rxtConfigMap, String attribute) {
         Map<?, ?> attrMap = getAttributeMap(rxtConfigMap);

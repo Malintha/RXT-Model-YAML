@@ -4,8 +4,8 @@ endpoint:
   content:
     environment:
       label: Environment
-      fieldType: set
-      elements:
+      fieldType: select
+      values:
            - None
            - Unknown
            - Dev
@@ -13,6 +13,7 @@ endpoint:
            - Production
 
     url:
+      appearWith: environment
       label: URL
       fieldType: text
       regex: http\.\S+\.com
