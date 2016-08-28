@@ -1,7 +1,9 @@
 #Metadata
 soapservice:
   extends:
-    - service
+        - service
+#        - businessProcess
+
   displayname: SOAP Service
   concrete: true
   mediaType: application/vnd.wso2-soap-service+xml

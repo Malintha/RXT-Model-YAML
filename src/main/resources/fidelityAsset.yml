@@ -10,3 +10,4 @@ fidelityAsset:
           label: Created Time
           type: time
           required: true
+          inherits: true

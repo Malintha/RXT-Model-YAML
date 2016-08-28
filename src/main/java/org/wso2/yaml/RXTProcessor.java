@@ -30,7 +30,7 @@ public class RXTProcessor {
         try {
             Map<String, Map<Object,Object>> rxtConfigs = rxtUtils.getRxtConfigMaps();
             Map<Object,Object> soapService = rxtConfigs.get("soapservice");
-            System.out.println(soapService.toString());
+//            System.out.println(soapService.toString());
             HashMap<String, Object> soapServiceFields = new HashMap<>();
             rxtUtils.resolveAllFields(soapService, soapServiceFields);
             System.out.println(soapServiceFields.toString());
