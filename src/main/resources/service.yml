@@ -1,24 +1,24 @@
 service:
   extends:
-        - fidelityAsset
+        - asset
   content:
 
     Author: #use a single case for keys #if this concept is used, key will be the label.
 
     name: #if any field doesnt have a label use the key
-        Label: Name
+        label: Name
         required: true
         type: String
 
     version:
-        Label: Version
+        label: Version
         required: true
         type: String
         validate: ([0-9]+\.{0,1})*
         validateMessage: Please follow the format x.x.x
 
     description:
-        Label: Description
+        label: Description
         required: false
         type: string
         inherits: false

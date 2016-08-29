@@ -4,17 +4,15 @@ docLink:
   content:
     docType:
       label: Document Type
-      fieldType: text
+      type: text
       required: true
 
     docUrl:
-      appearWith: docType
       label: URL
-      fieldType: text
+      type: text
       required: true
 
     comment:
-      appearWith: docUrl
       label: Comment
 
 

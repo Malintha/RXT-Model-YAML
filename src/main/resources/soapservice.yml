@@ -2,7 +2,7 @@
 soapservice:
   extends:
         - service
-#        - businessProcess
+        - businessProcess
 
   displayname: SOAP Service
   concrete: true
@@ -10,8 +10,9 @@ soapservice:
 
   content:
     endPoints:
+        label: EndPoints
         importField: endpoint
-        occurences: [0..n]
+        occurences: 0..4
 
     transportProtocol:
         label: Transport Protocol
@@ -26,5 +27,6 @@ soapservice:
             - XMPP
 
     docLinks:
+        label: Doc Links
         importField: docLink
-        occurences: [0..n]
+        occurences: 3

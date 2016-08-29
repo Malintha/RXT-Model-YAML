@@ -4,7 +4,7 @@ endpoint:
   content:
     environment:
       label: Environment
-      fieldType: select
+      type: select
       values:
            - None
            - Unknown
@@ -13,8 +13,7 @@ endpoint:
            - Production
 
     url:
-      appearWith: environment
       label: URL
-      fieldType: text
+      type: text
       regex: http\.\S+\.com
       validationMessage: Please enter a valid URL

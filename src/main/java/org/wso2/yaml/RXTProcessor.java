@@ -28,98 +28,139 @@ public class RXTProcessor {
     public static void main(String[] args) {
 
         try {
-            Map<String, Map<Object,Object>> rxtConfigs = rxtUtils.getRxtConfigMaps();
-            Map<Object,Object> soapService = rxtConfigs.get("soapservice");
+            Map<String, Map<Object, Object>> rxtConfigs = rxtUtils.getRxtConfigMaps();
+            Map<Object, Object> soapService = rxtConfigs.get("soapservice");
 
             HashMap<String, Object> soapServiceFields = new HashMap<>();
             rxtUtils.resolveAllFields(soapService, soapServiceFields);
-            System.out.println(soapServiceFields.toString());
-//            getCmdInputs(soapServiceFields);
+//            System.out.println(soapServiceFields.toString());
+            getCmdInputs(soapServiceFields);
         } catch (RXTException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void getCmdInputs(Map<?,?> rxtAttrMap) throws IOException {
+    public static void getCmdInputs(Map<?, ?> rxtAttrMap) throws IOException {
 
         InputStreamReader is = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(is);
-        Map<?,?> contentMap = rxtUtils.getContentMap(rxtAttrMap);
-        HashMap<String, String> responseMap = new HashMap<>();
-
+        HashMap<String, Object> responseMap = new HashMap<>();
         ArrayList<String> contentElems = new ArrayList<>();
-        Iterator it = contentMap.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry<?,?> pair = (Map.Entry<?, ?>) it.next();
-            contentElems.add((String)pair.getKey());
+        Iterator it = rxtAttrMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<?, ?> pair = (Map.Entry<?, ?>) it.next();
+            contentElems.add((String) pair.getKey());
         }
 
-        for(String field : contentElems) {
-            Object fieldElement = rxtUtils.getFieldAttribute(contentMap, field);
-            LinkedHashMap<?,?> dataSetMap = null;
+        for (String field : contentElems) {
+            //            System.out.println("#####"+field);
+            Object fieldElement = rxtAttrMap.get(field);
+            Map<?, ?> dataSetMap = null;
             String dataSetStrValue = null;
             String dataSetStrKey = null;
+            int lowerBound = 1, upperBound = 1;
             try {
                 dataSetStrValue = (String) fieldElement;
                 dataSetStrKey = field;
+            } catch (ClassCastException e) {
+                dataSetMap = (Map<?, ?>) fieldElement;
             }
-            catch (ClassCastException e) {
-                dataSetMap = (LinkedHashMap)fieldElement;
-            }
-            if(dataSetMap != null) {
-                String label = (String) dataSetMap.get("Label");
-                boolean isRequired = false;
-                ArrayList<String> data = null;
-                String validateRegex = null;
-                String validateMessage = null;
+            if (dataSetMap != null) {
+                Map<?, ?> processMap = null;
+                if (dataSetMap.containsKey("occurences")) {
+                    String occ = (String) dataSetMap.get("occurences");
 
-                String type = (String) dataSetMap.get("type");
-                if (dataSetMap.get("required") != null) {
-                    isRequired = (Boolean) dataSetMap.get("required");
-                }
-                if (type.contains("option")) {
-                    data = (ArrayList<String>) dataSetMap.get("data");
-                }
-                if (dataSetMap.get("validate") != null) {
-                    validateRegex = (String) dataSetMap.get("validate");
-                    validateMessage = (String) dataSetMap.get("validateMessage");
-                }
-                System.out.println("Please enter " + label);
-                if(data != null) {
-                    for(String s : data)
-                        System.out.println(s);
-                }
-                String input = null;
-                if (isRequired) {
-                    while((input = br.readLine()).length() == 0) {
-                        System.out.println("Please enter " + label);
+                    if (occ.matches("([0-9]+\\.{2}\\S+)")) {
+                        lowerBound = Integer.parseInt(occ.split("..")[0]);
+                        upperBound = Integer.parseInt(occ.split("..")[1]);
+                    } else {
+                        lowerBound = upperBound = Integer.parseInt(occ);
                     }
                 }
-                else {
-                    input = br.readLine();
-                }
-                if(validateRegex != null) {
-                    if(!input.matches(validateRegex)) {
-                        System.out.println(validateMessage);
-                        while(!(input = br.readLine()).matches(validateRegex)) {
-                            System.out.println(validateMessage);
+
+                if (dataSetMap.containsKey("composedField")) {
+                    dataSetMap.remove("composedField");
+//                    System.out.println("******" + dataSetMap);
+                    //                    if(dataSetMap.containsKey("docLinks"))
+                    //                        compositeFieldList = (Map<?, ?>) dataSetMap.get("docLinks");
+                    //                    else if (dataSetMap.containsKey("endPoints"))
+                    //                        compositeFieldList = (Map<?, ?>) dataSetMap.get("endPoints");
+                    Iterator innerIt = dataSetMap.entrySet().iterator();
+
+                    System.out.println("***Enter " + field + "***");
+                    for (int i = lowerBound; i <= upperBound; i++) {
+                        while (innerIt.hasNext()) {
+                            Map.Entry innerPair = (Map.Entry) innerIt.next();
+                            Map<?, ?> innerMap = (Map<?, ?>) innerPair.getValue();
+                            responseMap = validateAndGetInput(innerMap, responseMap, field, br, true);
+
                         }
                     }
+                } else {
+                    for (int i = lowerBound; i <= upperBound; i++) {
+                        processMap = dataSetMap;
+                        responseMap = validateAndGetInput(processMap, responseMap, field, br, false);
+                    }
                 }
-
-                responseMap.put(field, input);
-
-            }
-            else if (dataSetStrKey != null){
-                System.out.println("Please enter "+dataSetStrKey);
+            } else if (dataSetStrKey != null) {
+                System.out.println("Please enter " + dataSetStrKey);
                 responseMap.put(field, br.readLine());
             }
         }
         Iterator rit = responseMap.entrySet().iterator();
         System.out.println("###### Asset Details ######");
         while (rit.hasNext()) {
-            Map.Entry pair = (Map.Entry)rit.next();
-            System.out.println(pair.getKey() + " : " +pair.getValue());
+            Map.Entry pair = (Map.Entry) rit.next();
+            System.out.println(pair.getKey() + " : " + pair.getValue());
         }
+    }
+
+    public static HashMap<String, Object> validateAndGetInput(Map<?, ?> processMap, HashMap<String, Object> responseMap,
+            String field, BufferedReader br, boolean composite) throws IOException {
+        String label = (String) processMap.get("label");
+        boolean isRequired = false;
+        ArrayList<String> data = null;
+        String validateRegex = null;
+        String validateMessage = null;
+
+        String type = (String) processMap.get("type");
+        if (processMap.get("required") != null) {
+            isRequired = (Boolean) processMap.get("required");
+        }
+        if (type != null)
+            if (type.contains("select")) {
+                data = (ArrayList<String>) processMap.get("values");
+            }
+        if (processMap.get("validate") != null) {
+            validateRegex = (String) processMap.get("validate");
+            validateMessage = (String) processMap.get("validateMessage");
+        }
+        System.out.println("Please enter " + label);
+        if (data != null) {
+            for (String s : data)
+                System.out.println(s);
+        }
+        String input = null;
+        if (isRequired) {
+            while ((input = br.readLine()).length() == 0) {
+                System.out.println("Please enter " + label);
+            }
+        } else {
+            input = br.readLine();
+        }
+        if (validateRegex != null) {
+            if (!input.matches(validateRegex)) {
+                System.out.println(validateMessage);
+                while (!(input = br.readLine()).matches(validateRegex)) {
+                    System.out.println(validateMessage);
+                }
+            }
+        }
+
+        responseMap.put(field, input);
+
+        return responseMap;
     }
 }

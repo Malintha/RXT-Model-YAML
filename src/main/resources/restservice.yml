@@ -10,7 +10,7 @@ restservice:
   content:
     endPoints:
         importField: endpoint
-        occurences: [0..n]
+        occurences: 0..n
 
     transportProtocol:
         label: Transport Protocol
