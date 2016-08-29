@@ -57,10 +57,10 @@ public class RXTProcessor {
         for (String field : contentElems) {
             //            System.out.println("#####"+field);
             Object fieldElement = rxtAttrMap.get(field);
+            cInput = "";
             Map<?, ?> dataSetMap = null;
             String dataSetStrValue = null;
             String dataSetStrKey = null;
-            int lowerBound = 1, upperBound = 1;
             try {
                 dataSetStrValue = (String) fieldElement;
                 dataSetStrKey = field;
@@ -69,28 +69,22 @@ public class RXTProcessor {
             }
             if (dataSetMap != null) {
                 Map<?, ?> processMap = null;
+                int lowerBound = 0, upperBound = 0;
                 if (dataSetMap.containsKey("occurences")) {
                     String occ = (String) dataSetMap.get("occurences");
-
                     if (occ.matches("([0-9]+\\.{2}\\S+)")) {
                         lowerBound = Integer.parseInt(occ.split("..")[0]);
                         upperBound = Integer.parseInt(occ.split("..")[1]);
                     } else {
-                        lowerBound = upperBound = Integer.parseInt(occ);
+                        upperBound = Integer.parseInt(occ);
                     }
                 }
 
                 if (dataSetMap.containsKey("composedField")) {
                     dataSetMap.remove("composedField");
-//                    System.out.println("******" + dataSetMap);
-                    //                    if(dataSetMap.containsKey("docLinks"))
-                    //                        compositeFieldList = (Map<?, ?>) dataSetMap.get("docLinks");
-                    //                    else if (dataSetMap.containsKey("endPoints"))
-                    //                        compositeFieldList = (Map<?, ?>) dataSetMap.get("endPoints");
                     Iterator innerIt = dataSetMap.entrySet().iterator();
-
                     System.out.println("***Enter " + field + "***");
-                    for (int i = lowerBound; i <= upperBound; i++) {
+                    for (int i = 0; i <= upperBound; i++) {
                         while (innerIt.hasNext()) {
                             Map.Entry innerPair = (Map.Entry) innerIt.next();
                             Map<?, ?> innerMap = (Map<?, ?>) innerPair.getValue();
@@ -98,6 +92,7 @@ public class RXTProcessor {
 
                         }
                     }
+                    System.out.println("\t\t***");
                 } else {
                     for (int i = lowerBound; i <= upperBound; i++) {
                         processMap = dataSetMap;
@@ -110,12 +105,14 @@ public class RXTProcessor {
             }
         }
         Iterator rit = responseMap.entrySet().iterator();
-        System.out.println("###### Asset Details ######");
+        System.out.println("###### Asset Details ######\n");
         while (rit.hasNext()) {
             Map.Entry pair = (Map.Entry) rit.next();
             System.out.println(pair.getKey() + " : " + pair.getValue());
         }
     }
+
+    static String cInput = "";
 
     public static HashMap<String, Object> validateAndGetInput(Map<?, ?> processMap, HashMap<String, Object> responseMap,
             String field, BufferedReader br, boolean composite) throws IOException {
@@ -140,7 +137,7 @@ public class RXTProcessor {
         System.out.println("Please enter " + label);
         if (data != null) {
             for (String s : data)
-                System.out.println(s);
+                System.out.println(" * "+s);
         }
         String input = null;
         if (isRequired) {
@@ -158,8 +155,13 @@ public class RXTProcessor {
                 }
             }
         }
+        if(composite) {
+            cInput += input+"\t";
+        }
+        else
+        cInput = input;
 
-        responseMap.put(field, input);
+        responseMap.put(field, cInput);
 
         return responseMap;
     }
