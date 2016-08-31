@@ -1,6 +1,6 @@
 #Metadata
 restservice:
-  displayname: REST Service
+  label: REST Service
   extends:
         - service
   concrete: true
@@ -9,8 +9,8 @@ restservice:
 #RXT Content
   content:
     endPoints:
-        importField: endpoint
-        occurences: 0..n
+        type: endpoint
+        occurences: 0..3
 
     transportProtocol:
         label: Transport Protocol
@@ -25,7 +25,10 @@ restservice:
             - XMPP
 
     docLinks:
-        importField: docLinks
+        type: docLinks
         occurences: 3
 
 #get all fields recursively to an array. then add them to the required rxt.
+
+
+

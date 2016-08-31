@@ -4,12 +4,12 @@ docLink:
   content:
     docType:
       label: Document Type
-      type: text
+      fieldType: text
       required: true
 
     docUrl:
       label: URL
-      type: text
+      fieldType: text
       required: true
 
     comment:

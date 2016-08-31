@@ -2,3 +2,6 @@ businessProcess:
   content:
       Project:
       Department:
+      prcessID:
+        label: ProcessID
+        inherits: false

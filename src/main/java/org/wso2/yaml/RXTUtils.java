@@ -126,6 +126,7 @@ public class RXTUtils {
                         composedField = (Map<Object, Object>) resolveComposedField((String) fieldAttributes.get("importField"));
                         composedField.put("composedField","true");
                         fields.put(pair.getKey(), composedField);
+//                            String occ = (String) fieldAttributes.get("occurrences").toString();
                     } else {
                         fields.put(pair.getKey(), fieldAttributes);
                     }
@@ -133,6 +134,13 @@ public class RXTUtils {
             }
         }
         return fields;
+    }
+
+    public int[] getOccurrences(String occ) {
+        int[] occurrences = new int[2];
+        occurrences[0] = Integer.parseInt(occ.split("..")[0]);
+        occurrences[1] = Integer.parseInt(occ.split("..")[1]);
+        return occurrences;
     }
 
     public Map<?, ?> resolveComposedField(String fieldName) {

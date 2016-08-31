@@ -3,11 +3,11 @@ asset:
   content:
       createdDate:
           label: Created Date
-          type: date
+          type: text
           required: true
 
       createdTime:
           label: Created Time
-          type: time
+          type: text
           required: true
           inherits: true

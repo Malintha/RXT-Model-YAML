@@ -2,9 +2,9 @@
 soapservice:
   extends:
         - service
-        - businessProcess
+#        - businessProcess
 
-  displayname: SOAP Service
+  name: SOAP Service
   concrete: true
   mediaType: application/vnd.wso2-soap-service+xml
 
@@ -12,7 +12,6 @@ soapservice:
     endPoints:
         label: EndPoints
         importField: endpoint
-        occurences: 0..4
 
     transportProtocol:
         label: Transport Protocol
@@ -29,4 +28,7 @@ soapservice:
     docLinks:
         label: Doc Links
         importField: docLink
-        occurences: 3
+
+    associatedServices:
+        label: Associated Services
+        occurrences: 2

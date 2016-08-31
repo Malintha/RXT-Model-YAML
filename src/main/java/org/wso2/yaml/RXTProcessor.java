@@ -55,8 +55,8 @@ public class RXTProcessor {
         }
 
         for (String field : contentElems) {
-            //            System.out.println("#####"+field);
             Object fieldElement = rxtAttrMap.get(field);
+//            System.out.println(field+"*****"+fieldElement);
             cInput = "";
             Map<?, ?> dataSetMap = null;
             String dataSetStrValue = null;
@@ -69,9 +69,10 @@ public class RXTProcessor {
             }
             if (dataSetMap != null) {
                 Map<?, ?> processMap = null;
-                int lowerBound = 0, upperBound = 0;
-                if (dataSetMap.containsKey("occurences")) {
-                    String occ = (String) dataSetMap.get("occurences");
+//                System.out.println(dataSetMap);
+                int lowerBound = 1, upperBound = 1;
+                if (dataSetMap.containsKey("occurrences")) {
+                    String occ = (String) dataSetMap.get("occurrences").toString();
                     if (occ.matches("([0-9]+\\.{2}\\S+)")) {
                         lowerBound = Integer.parseInt(occ.split("..")[0]);
                         upperBound = Integer.parseInt(occ.split("..")[1]);
@@ -83,20 +84,20 @@ public class RXTProcessor {
                 if (dataSetMap.containsKey("composedField")) {
                     dataSetMap.remove("composedField");
                     Iterator innerIt = dataSetMap.entrySet().iterator();
-                    System.out.println("***Enter " + field + "***");
-                    for (int i = 0; i <= upperBound; i++) {
+                    System.out.println("\n***Enter " + field + "***");
+                    for (int i = 0; i < upperBound; i++) {
                         while (innerIt.hasNext()) {
                             Map.Entry innerPair = (Map.Entry) innerIt.next();
                             Map<?, ?> innerMap = (Map<?, ?>) innerPair.getValue();
-                            responseMap = validateAndGetInput(innerMap, responseMap, field, br, true);
+                            responseMap = validateAndGetInput(innerMap, responseMap, field, br, true, i);
 
                         }
                     }
-                    System.out.println("\t\t***");
+                    System.out.println("\t\t***\n");
                 } else {
                     for (int i = lowerBound; i <= upperBound; i++) {
                         processMap = dataSetMap;
-                        responseMap = validateAndGetInput(processMap, responseMap, field, br, false);
+                        responseMap = validateAndGetInput(processMap, responseMap, field, br, false, i);
                     }
                 }
             } else if (dataSetStrKey != null) {
@@ -115,7 +116,7 @@ public class RXTProcessor {
     static String cInput = "";
 
     public static HashMap<String, Object> validateAndGetInput(Map<?, ?> processMap, HashMap<String, Object> responseMap,
-            String field, BufferedReader br, boolean composite) throws IOException {
+            String field, BufferedReader br, boolean composite, int iteration) throws IOException {
         String label = (String) processMap.get("label");
         boolean isRequired = false;
         ArrayList<String> data = null;
@@ -130,9 +131,9 @@ public class RXTProcessor {
             if (type.contains("select")) {
                 data = (ArrayList<String>) processMap.get("values");
             }
-        if (processMap.get("validate") != null) {
-            validateRegex = (String) processMap.get("validate");
-            validateMessage = (String) processMap.get("validateMessage");
+        if (processMap.get("regex") != null) {
+            validateRegex = (String) processMap.get("regex");
+            validateMessage = (String) processMap.get("validationMessage");
         }
         System.out.println("Please enter " + label);
         if (data != null) {
@@ -160,9 +161,11 @@ public class RXTProcessor {
         }
         else
         cInput = input;
-
+        if(iteration>1) {
+            System.out.println("again");
+            responseMap.put(field + "_" + iteration, cInput);
+        }
         responseMap.put(field, cInput);
-
         return responseMap;
     }
 }
