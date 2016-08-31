@@ -4,14 +4,14 @@ soapservice:
         - service
 #        - businessProcess
 
-  name: SOAP Service
+  label: SOAP Service
   concrete: true
   mediaType: application/vnd.wso2-soap-service+xml
 
   content:
     endPoints:
         label: EndPoints
-        importField: endpoint
+        import: endpoint
 
     transportProtocol:
         label: Transport Protocol
@@ -27,7 +27,7 @@ soapservice:
 
     docLinks:
         label: Doc Links
-        importField: docLink
+        import: docLink
 
     associatedServices:
         label: Associated Services

@@ -3,9 +3,9 @@ service:
         - asset
   content:
 
-    Author: #use a single case for keys #if this concept is used, key will be the label.
+    Author:
 
-    name: #if any field doesnt have a label use the key
+    name:
         label: Name
         required: true
         type: text

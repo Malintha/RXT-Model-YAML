@@ -122,8 +122,8 @@ public class RXTUtils {
                 }
                 if (inherit) {
                     Map<Object, Object> composedField = null;
-                    if (fieldAttributes.containsKey("importField")) {
-                        composedField = (Map<Object, Object>) resolveComposedField((String) fieldAttributes.get("importField"));
+                    if (fieldAttributes.containsKey("import")) {
+                        composedField = (Map<Object, Object>) resolveComposedField((String) fieldAttributes.get("import"));
                         composedField.put("composedField","true");
                         fields.put(pair.getKey(), composedField);
 //                            String occ = (String) fieldAttributes.get("occurrences").toString();

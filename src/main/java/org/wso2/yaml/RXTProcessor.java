@@ -162,10 +162,11 @@ public class RXTProcessor {
         else
         cInput = input;
         if(iteration>1) {
-            System.out.println("again");
-            responseMap.put(field + "_" + iteration, cInput);
+            responseMap.put(field + " [" + iteration+"] ", cInput);
         }
-        responseMap.put(field, cInput);
+        else {
+            responseMap.put(field, cInput);
+        }
         return responseMap;
     }
 }

@@ -1,5 +1,7 @@
 endpoint:
-  type: field
+
+  concrete: true
+  label: Endpoint
 
   content:
     environment:
